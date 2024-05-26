@@ -43,28 +43,28 @@ type Ownership map[string]int
 type System map[string]interface{}
 
 type DocumentStats struct {
-	CoreVersion      string
-	SystemId         string
-	SystemVersion    string
-	CreatedTime      int
-	ModifiedTime     int
-	LastModifiedBy   string
-	CompendiumSource string
-	DuplicateSource  string
+	CoreVersion      string `json:"coreVersion" yaml:"coreVersion"`
+	SystemId         string `json:"systemId" yaml:"systemId"`
+	SystemVersion    string `json:"systemVersion" yaml:"systemVersion"`
+	CreatedTime      int    `json:"createdTime" yaml:"createdTime"`
+	ModifiedTime     int    `json:"modifiedTime" yaml:"modifiedTime"`
+	LastModifiedBy   string `json:"lastModifiedBy" yaml:"lastModifiedBy"`
+	CompendiumSource string `json:"compendiumSource" yaml:"compendiumSource"`
+	DuplicateSource  string `json:"duplicateSource" yaml:"duplicateSource"`
 }
 
 type TextureData struct {
-	Src            string
-	AnchorX        float64
-	AnchorY        float64
-	OffsetX        float64
-	OffsetY        float64
-	Fit            string
-	ScaleX         float64
-	ScaleY         float64
-	Rotation       float64
-	Tint           string
-	AlphaThreshold float64
+	Src            string  `json:"src" yaml:"src"`
+	AnchorX        float64 `json:"anchorX" yaml:"anchorX"`
+	AnchorY        float64 `json:"anchorY" yaml:"anchorY"`
+	OffsetX        float64 `json:"offsetX" yaml:"offsetX"`
+	OffsetY        float64 `json:"offsetY" yaml:"offsetY"`
+	Fit            string  `json:"fit" yaml:"fit"`
+	ScaleX         float64 `json:"scaleX" yaml:"scaleX"`
+	ScaleY         float64 `json:"scaleY" yaml:"scaleY"`
+	Rotation       float64 `json:"rotation" yaml:"rotation"`
+	Tint           string  `json:"tint" yaml:"tint"`
+	AlphaThreshold float64 `json:"alphaThreshold" yaml:"alphaThreshold"`
 }
 
 type Document interface {
@@ -96,151 +96,151 @@ func (b *BaseDocument) ExportName(isYaml bool) string {
 }
 
 type BaseDocument struct {
-	Key  string `json:"-"`
-	Id   string `json:"_id"`
-	Name string
+	Key  string `json:"_key" yaml:"_key"`
+	Id   string `json:"_id" yaml:"_id"`
+	Name string `json:"name" yaml:"name"`
 }
 
 type FolderDocument struct {
 	BaseDocument
-	Type        string
-	Description string
-	Folder      *FolderDocument
-	Sorting     string
-	Sort        int
-	Color       string
-	Flags       *Flags
-	Stats       *DocumentStats `json:"_stats"`
+	Type        string          `json:"type" yaml:"type"`
+	Description string          `json:"description" yaml:"description"`
+	Folder      *FolderDocument `json:"folder" yaml:"folder"`
+	Sorting     string          `json:"sorting" yaml:"sorting"`
+	Sort        int             `json:"sort" yaml:"sort"`
+	Color       string          `json:"color" yaml:"color"`
+	Flags       *Flags          `json:"flags" yaml:"flags"`
+	Stats       *DocumentStats  `json:"_stats" yaml:"_stats"`
 }
 
 type SceneDocument struct {
 	BaseDocument
-	Active              bool
-	Navigation          bool
-	NavOrder            int
-	NavName             string
-	Background          *TextureData
-	Foreground          string
-	ForegroundElevation int
-	Thumb               string
-	Width               int
-	Height              int
-	Padding             int
+	Active              bool         `json:"active" yaml:"active"`
+	Navigation          bool         `json:"navigation" yaml:"navigation"`
+	NavOrder            int          `json:"navOrder" yaml:"navOrder"`
+	NavName             string       `json:"navName" yaml:"navName"`
+	Background          *TextureData `json:"background" yaml:"background"`
+	Foreground          string       `json:"foreground" yaml:"foreground"`
+	ForegroundElevation int          `json:"foregroundElevation" yaml:"foregroundElevation"`
+	Thumb               string       `json:"thumb" yaml:"thumb"`
+	Width               int          `json:"width" yaml:"width"`
+	Height              int          `json:"height" yaml:"height"`
+	Padding             int          `json:"padding" yaml:"padding"`
 	Initial             struct {
-		X     int
-		Y     int
-		Scale float64
-	}
-	BackgroundColor string
+		X     int     `json:"x" yaml:"x"`
+		Y     int     `json:"y" yaml:"y"`
+		Scale float64 `json:"scale" yaml:"scale"`
+	} `json:"initial" yaml:"initial"`
+	BackgroundColor string `json:"backgroundColor" yaml:"backgroundColor"`
 	Grid            struct {
-		Type      int
-		Size      int
-		Style     string
-		Thickness int
-		Color     string
-		Alpha     float64
-		Distance  float64
-		Units     string
-	}
-	TokenVision          bool
-	FogExploration       bool
-	FogReset             int
-	GlobalLight          bool
-	GlobalLightThreshold float64
-	Darkness             float64
-	FogOverlay           string
-	FogExploredColor     string
-	FogUnexploredColor   string
-	Drawings             []interface{}
-	Tokens               []interface{}
-	Lights               []interface{}
-	Notes                []interface{}
-	Sounds               []interface{}
-	Templates            []interface{}
-	Tiles                []interface{}
-	Walls                []interface{}
-	Playlist             []interface{}
-	PlaylistSound        []interface{}
-	Journal              []interface{}
-	JournalEntryPage     []interface{}
-	Weather              string
-	Folder               *FolderDocument
-	Sort                 int
-	Ownership            *Ownership
-	Flags                *Flags
-	Stats                *DocumentStats `json:"_stats"`
+		Type      int     `json:"type" yaml:"type"`
+		Size      int     `json:"size" yaml:"size"`
+		Style     string  `json:"style" yaml:"style"`
+		Thickness int     `json:"thickness" yaml:"thickness"`
+		Color     string  `json:"color" yaml:"color"`
+		Alpha     float64 `json:"alpha" yaml:"alpha"`
+		Distance  float64 `json:"distance" yaml:"distance"`
+		Units     string  `json:"units" yaml:"units"`
+	} `json:"grid" yaml:"grid"`
+	TokenVision          bool            `json:"tokenVision" yaml:"tokenVision"`
+	FogExploration       bool            `json:"fogExploration" yaml:"fogExploration"`
+	FogReset             int             `json:"fogReset" yaml:"fogReset"`
+	GlobalLight          bool            `json:"globalLight" yaml:"globalLight"`
+	GlobalLightThreshold float64         `json:"globalLightThreshold" yaml:"globalLightThreshold"`
+	Darkness             float64         `json:"darkness" yaml:"darkness"`
+	FogOverlay           string          `json:"fogOverlay" yaml:"fogOverlay"`
+	FogExploredColor     string          `json:"fogExploredColor" yaml:"fogExploredColor"`
+	FogUnexploredColor   string          `json:"fogUnexploredColor" yaml:"fogUnexploredColor"`
+	Drawings             []interface{}   `json:"drawings" yaml:"drawings"`
+	Tokens               []interface{}   `json:"tokens" yaml:"tokens"`
+	Lights               []interface{}   `json:"lights" yaml:"lights"`
+	Notes                []interface{}   `json:"notes" yaml:"notes"`
+	Sounds               []interface{}   `json:"sounds" yaml:"sounds"`
+	Templates            []interface{}   `json:"templates" yaml:"templates"`
+	Tiles                []interface{}   `json:"tiles" yaml:"tiles"`
+	Walls                []interface{}   `json:"walls" yaml:"walls"`
+	Playlist             []interface{}   `json:"playlist" yaml:"playlist"`
+	PlaylistSound        []interface{}   `json:"playlistSound" yaml:"playlistSound"`
+	Journal              []interface{}   `json:"journal" yaml:"journal"`
+	JournalEntryPage     []interface{}   `json:"journalEntryPage" yaml:"journalEntryPage"`
+	Weather              string          `json:"weather" yaml:"weather"`
+	Folder               *FolderDocument `json:"folder" yaml:"folder"`
+	Sort                 int             `json:"sort" yaml:"sort"`
+	Ownership            *Ownership      `json:"ownership" yaml:"ownership"`
+	Flags                *Flags          `json:"flags" yaml:"flags"`
+	Stats                *DocumentStats  `json:"_stats" yaml:"_stats"`
 }
 
 type CombattantDocument struct {
 	BaseDocument
-	Type       string
-	System     *System
-	ActorId    string
-	TokenId    string
-	SceneId    string
-	Img        string
-	Initiative int
-	Hidden     bool
-	Defeated   bool
-	Flags      *Flags
-	Stats      *DocumentStats `json:"_stats"`
+	Type       string         `json:"type" yaml:"type"`
+	System     *System        `json:"system" yaml:"system"`
+	ActorId    string         `json:"actorId" yaml:"actorId"`
+	TokenId    string         `json:"tokenId" yaml:"tokenId"`
+	SceneId    string         `json:"sceneId" yaml:"sceneId"`
+	Img        string         `json:"img" yaml:"img"`
+	Initiative int            `json:"initiative" yaml:"initiative"`
+	Hidden     bool           `json:"hidden" yaml:"hidden"`
+	Defeated   bool           `json:"defeated" yaml:"defeated"`
+	Flags      *Flags         `json:"flags" yaml:"flags"`
+	Stats      *DocumentStats `json:"_stats" yaml:"_stats"`
 }
 
 type CombatDocument struct {
-	Id         string `json:"_id"`
-	Type       string
-	System     *System
-	Scene      *SceneDocument
-	Combatants *[]CombattantDocument
-	Active     bool
-	Round      int
-	Turn       int
-	Sort       int
-	Flags      *Flags
-	Stats      *DocumentStats `json:"_stats"`
+	Id         string                `json:"_id" yaml:"_id"`
+	Type       string                `json:"type" yaml:"type"`
+	System     *System               `json:"system" yaml:"system"`
+	Scene      *SceneDocument        `json:"scene" yaml:"scene"`
+	Combatants *[]CombattantDocument `json:"combatants" yaml:"combatants"`
+	Active     bool                  `json:"active" yaml:"active"`
+	Round      int                   `json:"round" yaml:"round"`
+	Turn       int                   `json:"turn" yaml:"turn"`
+	Sort       int                   `json:"sort" yaml:"sort"`
+	Flags      *Flags                `json:"flags" yaml:"flags"`
+	Stats      *DocumentStats        `json:"_stats" yaml:"_stats"`
 }
 
 type ActiveEffectDocument struct {
 	BaseDocument
-	Img     string
-	Type    string
-	System  *System
+	Img     string  `json:"img" yaml:"img"`
+	Type    string  `json:"type" yaml:"type"`
+	System  *System `json:"system" yaml:"system"`
 	Changes []struct {
-		Key      string
-		Value    string
-		Mode     int
-		Priority float64
-	}
-	Disabled bool
+		Key      string  `json:"key" yaml:"key"`
+		Value    string  `json:"value" yaml:"value"`
+		Mode     int     `json:"mode" yaml:"mode"`
+		Priority float64 `json:"priority" yaml:"priority"`
+	} `json:"changes" yaml:"changes"`
+	Disabled bool `json:"disabled" yaml:"disabled"`
 	Duration []struct {
-		StartTime  int
-		Seconds    int
-		Combat     *CombatDocument
-		Rounds     int
-		Turns      int
-		StartRound int
-		StartTurn  int
-	}
-	Description string
-	Origin      string
-	Tint        string
-	Transfer    bool
-	Statuses    []string
-	Flags       *Flags
-	Stats       *DocumentStats `json:"_stats"`
+		StartTime  int             `json:"startTime" yaml:"startTime"`
+		Seconds    int             `json:"seconds" yaml:"seconds"`
+		Combat     *CombatDocument `json:"combat" yaml:"combat"`
+		Rounds     int             `json:"rounds" yaml:"rounds"`
+		Turns      int             `json:"turns" yaml:"turns"`
+		StartRound int             `json:"startRound" yaml:"startRound"`
+		StartTurn  int             `json:"startTurn" yaml:"startTurn"`
+	} `json:"duration" yaml:"duration"`
+	Description string         `json:"description" yaml:"description"`
+	Origin      string         `json:"origin" yaml:"origin"`
+	Tint        string         `json:"tint" yaml:"tint"`
+	Transfer    bool           `json:"transfer" yaml:"transfer"`
+	Statuses    []string       `json:"statuses" yaml:"statuses"`
+	Flags       *Flags         `json:"flags" yaml:"flags"`
+	Stats       *DocumentStats `json:"_stats" yaml:"_stats"`
 }
 
 type ItemDocument struct {
 	BaseDocument
-	Type      string
-	Img       string
-	System    *System
-	Effects   *[]ActiveEffectDocument
-	Folder    *FolderDocument
-	Sort      int
-	Ownership *Ownership
-	Flags     *Flags
-	Stats     *DocumentStats `json:"_stats"`
+	Type      string                  `json:"type" yaml:"type"`
+	Img       string                  `json:"img" yaml:"img"`
+	System    *System                 `json:"system" yaml:"system"`
+	Effects   *[]ActiveEffectDocument `json:"effects" yaml:"effects"`
+	Folder    *FolderDocument         `json:"folder" yaml:"folder"`
+	Sort      int                     `json:"sort" yaml:"sort"`
+	Ownership *Ownership              `json:"ownership" yaml:"ownership"`
+	Flags     *Flags                  `json:"flags" yaml:"flags"`
+	Stats     *DocumentStats          `json:"_stats" yaml:"_stats"`
 }
 
 var documentTypeMapping = map[string]func() Document{
@@ -299,6 +299,8 @@ By default, packs are inside a packs directory. If this is not the case, you can
 			return fmt.Errorf("cannot read directory \"%s\": %s", pd, err)
 		}
 
+		isYaml, _ := cmd.Flags().GetBool("yaml")
+
 		for _, pack := range packs {
 			if !pack.IsDir() {
 				fmt.Println(pack.Name(), "is not a directory")
@@ -337,7 +339,7 @@ By default, packs are inside a packs directory. If this is not the case, you can
 				}
 
 				doc.SetKey(collection)
-				err = serializeDocument(doc, doc.ExportName(false), false)
+				err = serializeDocument(doc, doc.ExportName(isYaml), isYaml)
 				if err != nil {
 					fmt.Printf("cannot serialize doc: %s\n", err)
 				}
@@ -393,4 +395,5 @@ func init() {
 	// is called directly, e.g.:
 	unpackCmd.Flags().StringP("path", "p", "", "Path of the directory containing LevelDB packs")
 	unpackCmd.Flags().StringP("directory", "d", "packs", "Directory containing LevelDB packs")
+	unpackCmd.Flags().BoolP("yaml", "y", false, "Unpack as YAML files instead of JSON")
 }
