@@ -26,8 +26,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/djlechuck/foundrypacks/pkg/documents"
-	"github.com/djlechuck/foundrypacks/pkg/serializer"
+	"github.com/djlechuck/fvtt-packs/pkg/documents"
+	"github.com/djlechuck/fvtt-packs/pkg/serializer"
 	"github.com/spf13/cobra"
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/opt"
@@ -66,7 +66,7 @@ var unpackCmd = &cobra.Command{
 * JSON (default)
 * YAML (with -y flag)
 
-By default, packs are inside a packs directory. If this is not the case, you can override it with the -d flag: foundrypacks unpack -d mypacks`,
+By default, packs are inside a packs directory. If this is not the case, you can override it with the -d flag: fvtt-packs unpack -d mypacks`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		p, _ := cmd.Flags().GetString("path")
 		if p == "" {

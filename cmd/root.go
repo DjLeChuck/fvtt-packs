@@ -34,7 +34,7 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "foundrypacks",
+	Use:   "fvtt-packs",
 	Short: "Manage your compendium packs",
 	Long: `Manage your compendium packs with ease. You can unpack the LevelDB to get human readable files, modify them
 then pack them again into LevelDB files.
@@ -43,10 +43,10 @@ You can call this utility from everywhere. Go into your system/module directory 
 
 For example:
 
-foundrypacks unpack
+fvtt-packs unpack
 	This will unpack all the LevelDB which are in the packs directory into a _packs_sources directory, containing human readable files.
 
-foundrypacks pack
+fvtt-packs pack
 	This will pack all the human readable files inside _packs_sources directory into the packs directory.
 
 Flags can be used to customize the tools.`,
@@ -71,7 +71,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.foundrypacks.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.fvtt-packs.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -88,10 +88,10 @@ func initConfig() {
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
-		// Search config in home directory with name ".foundrypacks" (without extension).
+		// Search config in home directory with name ".fvtt-packs" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".foundrypacks")
+		viper.SetConfigName(".fvtt-packs")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

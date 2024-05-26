@@ -1,4 +1,4 @@
-module github.com/djlechuck/foundrypacks
+module github.com/djlechuck/fvtt-packs
 
 go 1.22.3
 

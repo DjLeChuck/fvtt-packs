@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 package main
 
-import "github.com/djlechuck/foundrypacks/cmd"
+import "github.com/djlechuck/fvtt-packs/cmd"
 
 func main() {
 	cmd.Execute()
