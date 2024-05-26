@@ -61,8 +61,8 @@ func getDoc(pack string, docType string, v []byte) (*documents.Document, error) 
 // unpackCmd represents the unpack command
 var unpackCmd = &cobra.Command{
 	Use:   "unpack",
-	Short: "Unpack LevelDB into human readable files",
-	Long: `Unpack the LevelDB to get human readable files. Multiple output formats are supported:
+	Short: "Unpack LevelDB into human-readable files",
+	Long: `Unpack the LevelDB to get human-readable files. Multiple output formats are supported:
 * JSON (default)
 * YAML (with -y flag)
 

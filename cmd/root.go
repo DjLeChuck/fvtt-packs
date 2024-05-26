@@ -36,7 +36,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "fvtt-packs",
 	Short: "Manage your compendium packs",
-	Long: `Manage your compendium packs with ease. You can unpack the LevelDB to get human readable files, modify them
+	Long: `Manage your compendium packs with ease. You can unpack the LevelDB to get human-readable files, modify them
 then pack them again into LevelDB files.
 
 You can call this utility from everywhere. Go into your system/module directory then launch the appropriate command!
@@ -44,10 +44,10 @@ You can call this utility from everywhere. Go into your system/module directory 
 For example:
 
 fvtt-packs unpack
-	This will unpack all the LevelDB which are in the packs directory into a _packs_sources directory, containing human readable files.
+	This will unpack all the LevelDB which are in the packs directory into a _packs_sources directory, containing human-readable files.
 
 fvtt-packs pack
-	This will pack all the human readable files inside _packs_sources directory into the packs directory.
+	This will pack all the human-readable files inside _packs_sources directory into the packs directory.
 
 Flags can be used to customize the tools.`,
 	// Uncomment the following line if your bare application
