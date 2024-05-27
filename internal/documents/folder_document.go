@@ -1,5 +1,7 @@
 package documents
 
+import "github.com/syndtr/goleveldb/leveldb"
+
 type FolderDocument struct {
 	baseDocument `yaml:",inline"`
 	Type         string         `json:"type" yaml:"type"`
@@ -11,3 +13,5 @@ type FolderDocument struct {
 	Flags        *Flags         `json:"flags" yaml:"flags"`
 	Stats        *DocumentStats `json:"_stats" yaml:"_stats"`
 }
+
+func (d *FolderDocument) HydrateCollections(db *leveldb.DB) {}

@@ -1,6 +1,9 @@
 package documents
 
-import "regexp"
+import (
+	"github.com/syndtr/goleveldb/leveldb"
+	"regexp"
+)
 
 type Flags map[string]interface{}
 
@@ -37,6 +40,7 @@ type Document interface {
 	SetPack(pack string)
 	SetKey(collection string)
 	ExportName(isYaml bool) string
+	HydrateCollections(db *leveldb.DB)
 }
 
 func (b *baseDocument) safeFilename() string {

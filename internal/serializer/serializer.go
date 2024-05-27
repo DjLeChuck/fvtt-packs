@@ -2,7 +2,7 @@ package serializer
 
 import (
 	"encoding/json"
-	"github.com/djlechuck/fvtt-packs/pkg/documents"
+	"github.com/djlechuck/fvtt-packs/internal/documents"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path"
