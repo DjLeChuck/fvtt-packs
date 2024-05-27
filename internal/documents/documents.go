@@ -1,7 +1,9 @@
 package documents
 
 import (
-	"github.com/syndtr/goleveldb/leveldb"
+	"encoding/json"
+	"fmt"
+	"github.com/djlechuck/fvtt-packs/internal/fvttdb"
 	"regexp"
 )
 
@@ -36,11 +38,24 @@ type TextureData struct {
 	AlphaThreshold float64 `json:"alphaThreshold" yaml:"alphaThreshold"`
 }
 
+type baseDocument struct {
+	Pack string `json:"-" yaml:"-"`
+	Key  string `json:"_key" yaml:"_key"`
+	Id   string `json:"_id" yaml:"_id"`
+	Name string `json:"name" yaml:"name"`
+}
+
 type Document interface {
 	SetPack(pack string)
 	SetKey(collection string)
 	ExportName(isYaml bool) string
-	HydrateCollections(db *leveldb.DB)
+	HydrateCollections(fvttdb *fvttdb.FvttDb) error
+}
+
+var documentTypeMapping = map[string]func() Document{
+	"actors":  func() Document { return &ActorDocument{} },
+	"folders": func() Document { return &FolderDocument{} },
+	"items":   func() Document { return &ItemDocument{} },
 }
 
 func (b *baseDocument) safeFilename() string {
@@ -70,9 +85,18 @@ func (b *baseDocument) ExportName(isYaml bool) string {
 	return b.Key + "." + extension
 }
 
-type baseDocument struct {
-	Pack string `json:"-" yaml:"-"`
-	Key  string `json:"_key" yaml:"_key"`
-	Id   string `json:"_id" yaml:"_id"`
-	Name string `json:"name" yaml:"name"`
+func Create(pack string, docType string, v []byte) (*Document, error) {
+	constructor, ok := documentTypeMapping[docType]
+	if !ok {
+		return nil, fmt.Errorf("structure not found for type %s\n", docType)
+	}
+	doc := constructor()
+	if err := json.Unmarshal(v, &doc); err != nil {
+		return nil, fmt.Errorf("cannot map document data: %s\n", err)
+	}
+
+	doc.SetPack(pack)
+	doc.SetKey(docType)
+
+	return &doc, nil
 }

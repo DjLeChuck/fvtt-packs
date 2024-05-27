@@ -23,40 +23,17 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/djlechuck/fvtt-packs/internal/documents"
+	"github.com/djlechuck/fvtt-packs/internal/fvttdb"
 	"github.com/djlechuck/fvtt-packs/internal/serializer"
 	"github.com/spf13/cobra"
-	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/syndtr/goleveldb/leveldb/opt"
+	"github.com/syndtr/goleveldb/leveldb/iterator"
 	"os"
 	"path/filepath"
 	"strings"
 )
-
-var documentTypeMapping = map[string]func() documents.Document{
-	"actors":  func() documents.Document { return &documents.ActorDocument{} },
-	"folders": func() documents.Document { return &documents.FolderDocument{} },
-	"items":   func() documents.Document { return &documents.ItemDocument{} },
-}
-
-func getDoc(pack string, docType string, v []byte) (*documents.Document, error) {
-	constructor, ok := documentTypeMapping[docType]
-	if !ok {
-		return nil, fmt.Errorf("structure not found for type %s", docType)
-	}
-	doc := constructor()
-	if err := json.Unmarshal(v, &doc); err != nil {
-		return nil, fmt.Errorf("cannot map document data: %s", err)
-	}
-
-	doc.SetPack(pack)
-	doc.SetKey(docType)
-
-	return &doc, nil
-}
 
 // unpackCmd represents the unpack command
 var unpackCmd = &cobra.Command{
@@ -82,18 +59,18 @@ By default, packs are inside a packs directory. If this is not the case, you can
 
 		info, err := os.Stat(pd)
 		if os.IsNotExist(err) {
-			return fmt.Errorf("no directory \"%s\" found", d)
+			return fmt.Errorf("no directory \"%s\" found\n", d)
 		}
 		if err != nil {
-			return fmt.Errorf("cannot access directory \"%s\": %s", d, err)
+			return fmt.Errorf("cannot access directory \"%s\": %s\n", d, err)
 		}
 		if !info.IsDir() {
-			return fmt.Errorf("\"%s\" is not a directory", d)
+			return fmt.Errorf("\"%s\" is not a directory\n", d)
 		}
 
 		packs, err := os.ReadDir(pd)
 		if err != nil {
-			return fmt.Errorf("cannot read directory \"%s\": %s", pd, err)
+			return fmt.Errorf("cannot read directory \"%s\": %s\n", pd, err)
 		}
 
 		isYaml, _ := cmd.Flags().GetBool("yaml")
@@ -108,44 +85,44 @@ By default, packs are inside a packs directory. If this is not the case, you can
 			fmt.Println("unpacking", pName, "...")
 
 			fullPath := filepath.Join(pd, pack.Name())
-			db, err := leveldb.OpenFile(fullPath, &opt.Options{
-				ErrorIfMissing: true,
-				ReadOnly:       true,
-			})
+
+			db, err := fvttdb.Open(fullPath)
 			if err != nil {
-				fmt.Printf("cannot open pack \"%s\": %s\n", pName, err)
-				continue
+				return fmt.Errorf("cannot open db: %s\n", err)
 			}
 			defer db.Close()
 
-			iter := db.NewIterator(nil, nil)
-			for iter.Next() {
+			err = db.IterateAll(func(iter iterator.Iterator) error {
 				k := iter.Key()
 				kStr := string(k)
 				parts := strings.Split(kStr, "!")
 				if len(parts) < 3 {
-					continue
+					return nil
 				}
 				collection := parts[1]
 				if strings.Contains(collection, ".") {
-					continue // This is not a primary document, skip it.
+					return nil // This is not a primary document, skip it.
 				}
 
 				fmt.Println("processing", kStr)
-				doc, err := getDoc(pName, collection, iter.Value())
+				doc, err := documents.Create(pName, collection, iter.Value())
 				if err != nil {
-					fmt.Printf("cannot get doc: %s\n", err)
-					continue
+					return fmt.Errorf("cannot get doc: %s\n", err)
+				}
+
+				if err := (*doc).HydrateCollections(db); err != nil {
+					return fmt.Errorf("cannot hydrate doc collections: %s\n", err)
 				}
 
 				err = serializer.SerializeDocument(doc, "_pack_sources/"+pName, isYaml)
 				if err != nil {
-					fmt.Printf("cannot serialize doc: %s\n", err)
+					return fmt.Errorf("cannot serialize doc: %s\n", err)
 				}
-			}
-			iter.Release()
-			if err := iter.Error(); err != nil {
-				return fmt.Errorf("iterator error: %s", err)
+
+				return nil
+			})
+			if err != nil {
+				return fmt.Errorf("iterator error: %s\n", err)
 			}
 		}
 

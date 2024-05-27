@@ -1,6 +1,6 @@
 package documents
 
-import "github.com/syndtr/goleveldb/leveldb"
+import "github.com/djlechuck/fvtt-packs/internal/fvttdb"
 
 type FolderDocument struct {
 	baseDocument `yaml:",inline"`
@@ -14,4 +14,6 @@ type FolderDocument struct {
 	Stats        *DocumentStats `json:"_stats" yaml:"_stats"`
 }
 
-func (d *FolderDocument) HydrateCollections(db *leveldb.DB) {}
+func (d *FolderDocument) HydrateCollections(fvttdb *fvttdb.FvttDb) error {
+	return nil
+}
